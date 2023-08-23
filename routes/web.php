@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StripeOnboardingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,10 +19,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})
-    ->middleware(['auth', 'verified'])
+Route::get('/onboarding', [StripeOnboardingController::class, 'index'])->name(
+    'onboarding'
+);
+
+Route::get('/dashboard', DashboardController::class)
+    ->middleware(['auth', 'verified', 'stripe_enabled'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
